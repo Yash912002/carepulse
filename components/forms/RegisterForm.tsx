@@ -8,9 +8,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Form, FormControl } from "@/components/ui/form";
 import { useState } from "react";
-import { PatientFormValidation, UserFormValidation } from "@/lib/validation";
+import { PatientFormValidation } from "@/lib/validation";
 import { useRouter } from "next/navigation";
-import { createUser, registerPatient } from "@/lib/actions/patient.actions";
+import { registerPatient } from "@/lib/actions/patient.actions";
 import { FormFieldType } from "./PatientForm";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import {
@@ -24,24 +24,21 @@ import { SelectItem } from "../ui/select";
 import FileUploader from "../FileUploader";
 
 const RegisterForm = ({ user }: { user: User }) => {
-	const [isLoading, setIsLoading] = useState(false);
-	const router = useRouter();
+	const [isLoading, setIsLoading] = useState(false); // State to manage loading status
+	const router = useRouter(); // Hook to navigate between routes
 
-	// 1. Define your form.
 	const form = useForm<z.infer<typeof PatientFormValidation>>({
-		resolver: zodResolver(PatientFormValidation),
+		resolver: zodResolver(PatientFormValidation), // Validation resolver for form data
 		defaultValues: {
-			...PatientFormDefaultValues,
+			...PatientFormDefaultValues, // Spread operator for default values
 			name: "",
 			email: "",
 			phone: "",
 		},
 	});
 
-	// 2. Define a submit handler.
 	async function onSubmit(values: z.infer<typeof PatientFormValidation>) {
-		// console.log(values);
-		setIsLoading(true);
+		setIsLoading(true); // Set loading state to true on form submission
 
 		let formData;
 
@@ -49,31 +46,34 @@ const RegisterForm = ({ user }: { user: User }) => {
 			values.identificationDocument &&
 			values.identificationDocument.length > 0
 		) {
+			// Check if identification document exists and has length
 			const blobFile = new Blob([values.identificationDocument[0]], {
-				type: values.identificationDocument[0].type,
+				type: values.identificationDocument[0].type, // Create a Blob object from identification document
 			});
 
-			formData = new FormData();
+			formData = new FormData(); // Initialize FormData object
 
-			formData.append("blobFile", blobFile);
-			formData.append("fileName", values.identificationDocument[0].name);
+			formData.append("blobFile", blobFile); // Append Blob file to FormData
+			formData.append("fileName", values.identificationDocument[0].name); // Append file name to FormData
 		}
+
 		try {
 			const patientData = {
-				...values,
-				userId: user.$id,
-				birthDate: new Date(values.birthDate),
-				identificationDocument: formData,
+				...values, // Spread operator for form values
+				userId: user.$id, // Add user ID to patient data
+				birthDate: new Date(values.birthDate), // Convert birth date to Date object
+				identificationDocument: formData, // Add FormData with identification document
 			};
 
 			// @ts-ignore
-			const patient = await registerPatient(patientData);
+			const patient = await registerPatient(patientData); // Call API to register patient
 
-			if (patient) router.push(`/patients/${user.$id}/new-appointment`);
+			if (patient) router.push(`/patients/${user.$id}/new-appointment`); // Navigate to new appointment page if registration is successful
 		} catch (error) {
-			console.log(error);
+			console.log(error); // Log error if registration fails
+		} finally {
+			setIsLoading(false); // Set loading state to false after process completion
 		}
-		setIsLoading(false);
 	}
 
 	return (
