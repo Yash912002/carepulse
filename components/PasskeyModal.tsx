@@ -43,7 +43,6 @@ const PasskeyModal = () => {
 	// useEffect to handle access key validation on component mount
 	useEffect(() => {
 		const accesskey = encryptedKey && decryptKey(encryptedKey);
-		return () => {
 			if (path) {
 				console.log(path);
 				if (accesskey === process.env.NEXT_PUBLIC_ADMIN_PASSKEY) {
@@ -54,8 +53,7 @@ const PasskeyModal = () => {
 					setOpen(true);
 				}
 			}
-		};
-	}, [encryptedKey]);
+	}, [encryptedKey, path, router]);
 
 	// Function to validate the input passkey
 	const validatePasskey = (
@@ -68,6 +66,7 @@ const PasskeyModal = () => {
 			const encryptedKey = encryptKey(passkey);
 			localStorage.setItem("accessKey", encryptedKey);
 			setOpen(false);
+			router.push("/admin");
 		} else {
 			// Set error message if passkey is invalid
 			setError("Invalid passkey. Please try again");
