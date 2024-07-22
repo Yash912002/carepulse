@@ -20,6 +20,7 @@ import { Select, SelectContent, SelectTrigger, SelectValue } from "./ui/select";
 import { Textarea } from "./ui/textarea";
 import { Checkbox } from "./ui/checkbox";
 
+// Interface for custom form field properties
 interface CustomProps {
 	control: Control<any>;
 	fieldType: FormFieldType;
@@ -35,6 +36,7 @@ interface CustomProps {
 	renderSkeleton?: (field: any) => React.ReactNode;
 }
 
+// RenderField component to render different form fields based on field type
 const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
 	const {
 		control,
@@ -52,6 +54,7 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
 	switch (fieldType) {
 		case FormFieldType.INPUT:
 			return (
+				// Render input field with optional icon
 				<div className="flex rounded-md border border-dark-500 bg-dark-400">
 					{iconSrc && (
 						<Image
@@ -73,6 +76,7 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
 			);
 		case FormFieldType.TEXTAREA:
 			return (
+				// Render textarea
 				<FormControl>
 					<Textarea
 						placeholder={placeholder}
@@ -84,6 +88,7 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
 			);
 		case FormFieldType.PHONE_INPUT:
 			return (
+				// Render phone input field
 				<FormControl>
 					<PhoneInput
 						defaultCountry="IN"
@@ -98,19 +103,20 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
 			);
 		case FormFieldType.DATE_PICKER:
 			return (
+				// Render date picker with optional time selection
 				<div className="flex rounded-md border border-dark-500 bg-dark-400">
 					<Image
 						src="/assets/icons/calendar.svg"
 						height={24}
 						width={24}
-						alt="calender"
+						alt="calendar"
 						className="ml-2"
 					/>
 					<FormControl>
 						<DatePicker
 							selected={field.value}
 							onChange={(date) => field.onChange(date)}
-							dateFormat={dateFormat ?? "MM/dd/YYYY"}
+							dateFormat={dateFormat ?? "MM/dd/yyyy"}
 							showTimeSelect={showTimeSelect ?? false}
 							timeInputLabel="Time:"
 							wrapperClassName="date-picker"
@@ -120,6 +126,7 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
 			);
 		case FormFieldType.SELECT:
 			return (
+				// Render select dropdown
 				<FormControl>
 					<Select onValueChange={field.onChange} defaultValue={field.value}>
 						<FormControl>
@@ -134,9 +141,11 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
 				</FormControl>
 			);
 		case FormFieldType.SKELETON:
+			// Render skeleton if provided
 			return renderSkeleton ? renderSkeleton(field) : null;
 		case FormFieldType.CHECKBOX:
 			return (
+				// Render checkbox
 				<FormControl>
 					<div className="flex items-center gap-4">
 						<Checkbox
@@ -144,22 +153,20 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
 							checked={field.value}
 							onCheckedChange={field.onChange}
 						/>
-
 						<label htmlFor={props.name} className="checkbox-label">
 							{props.label}
 						</label>
 					</div>
 				</FormControl>
 			);
-
 		default:
 			break;
 	}
 };
 
+// CustomFormField component to handle form fields rendering
 const CustomFormField = (props: CustomProps) => {
-	const { control, fieldType, name, label, placeholder, iconSrc, iconAlt } =
-		props;
+	const { control, fieldType, name, label } = props;
 	return (
 		<FormField
 			control={control}
@@ -178,6 +185,3 @@ const CustomFormField = (props: CustomProps) => {
 };
 
 export default CustomFormField;
-
-
-
