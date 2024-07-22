@@ -11,6 +11,7 @@ import { UserFormValidation } from "@/lib/validation";
 import { useRouter } from "next/navigation";
 import { createUser } from "@/lib/actions/patient.actions";
 
+// Define an enum for different form field types.
 export enum FormFieldType {
 	INPUT = "input",
 	TEXTAREA = "textarea",
@@ -22,10 +23,11 @@ export enum FormFieldType {
 }
 
 const PatientForm = () => {
+	// Initialize a state variable to track the loading state of the form submission.
 	const [isLoading, setIsLoading] = useState(false);
 	const router = useRouter();
 
-	// 1. Define your form.
+	// Define the form with validation using zodResolver and default values for the fields.
 	const form = useForm<z.infer<typeof UserFormValidation>>({
 		resolver: zodResolver(UserFormValidation),
 		defaultValues: {
@@ -35,19 +37,22 @@ const PatientForm = () => {
 		},
 	});
 
-	// 2. Define a submit handler.
+	// Define a submit handler to create a new user and redirect to the registration page on success.
+
 	async function onSubmit({
 		name,
 		email,
 		phone,
 	}: z.infer<typeof UserFormValidation>) {
-		// console.log(values);
+		console.log("Patient ", name, email, phone);
 		setIsLoading(true);
 
 		try {
+			// Create a new user with the submitted data.
 			const userData = { name, email, phone };
 			const user = await createUser(userData);
 
+			// Redirect to the registration page if the user is created successfully.
 			if (user) {
 				router.push(`/patients/${user.$id}/register`);
 			}
@@ -57,6 +62,7 @@ const PatientForm = () => {
 		setIsLoading(false);
 	}
 
+	// Render the form with custom form fields and a submit button
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 flex-1">
@@ -90,7 +96,7 @@ const PatientForm = () => {
 					control={form.control}
 					name="phone"
 					label="Phone Number"
-					placeholder="+9192223-23232"
+					placeholder="+9192223 23232"
 				/>
 
 				<SubmitButton isLoading={isLoading}> Get Started </SubmitButton>
