@@ -30,8 +30,8 @@ const AppointmentForm = ({
 	userId: string;
 	type: "create" | "cancel" | "schedule";
 	patientId: string;
-	appointment: Appointment;
-	setOpen: (open: boolean) => void;
+	appointment?: Appointment;
+	setOpen?: (open: boolean) => void;
 }) => {
 	const [isLoading, setIsLoading] = useState(false);
 
