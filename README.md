@@ -2,6 +2,9 @@
   <h3 align="center">A HealthCare Management System</h3>
 </div>
 
+## Looking for test credentials?
+  They’re available at the bottom of this page for quick access.
+
 ## Introduction
 
 A healthcare patient management application that allows patients to easily register, book, and manage their appointments with doctors, featuring administrative tools for scheduling, confirming, and canceling appointments, along with SMS notifications, all built using Next.js.
@@ -71,7 +74,7 @@ NEXT_PUBLIC_ADMIN_PASSKEY=111111
 ```
 
 Replace the placeholder values with your actual Appwrite credentials. You can obtain these credentials by signing up on the [Appwrite website](https://appwrite.io/).
-
+  
 **Running the Project**
 
 ```bash
@@ -79,3 +82,10 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser to view the project.
+
+## Test Credentials: 
+  **Full name:** Test user
+
+  **Email:** testuser@test.com
+
+  **Phone no:** +91 1234 567 890
